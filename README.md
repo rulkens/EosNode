@@ -1,2 +1,2 @@
 # EosNode
-Controlling the Eos lamp via i2c and the Adafruit PWM library
+Controlling the Eos lamp via a python TCP server
