@@ -1,0 +1,37 @@
+/**
+this is the specific responsive implementation for the navbar
+*/
+
+@navbar-full-padding-top: 50px; // top padding when the navbar is shown in full
+
+.navbar {
+  .visible-xs;
+  .visible-sm;
+  .visible-md;
+  .visible-lg;
+
+  @media (min-width: @grid-float-breakpoint) {
+    .navbar &__item {
+
+      // close button, not visible in normal version
+      &--close {
+        display: none;
+      }
+    }
+  }
+
+  @media(max-width: @grid-float-breakpoint) {
+
+    transition: all @navbar-open-speed @navbar-open-easing;
+    left: -@navbar-max-width;
+
+    // when it's open in the mobile version
+    .menu-opened & {
+      left: 0;
+    }
+  }
+
+  @media(min-width: @grid-float-breakpoint) {
+    padding-top: @navbar-full-padding-top;
+  }
+}

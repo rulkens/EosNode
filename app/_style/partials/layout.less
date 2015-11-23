@@ -1,0 +1,60 @@
+/**
+generic page layout
+*/
+
+html, body {
+  height: 100%;
+}
+
+#main {
+  display: flex;
+  min-height: 100%;
+
+  @media (max-width: @grid-float-breakpoint) {
+    max-width: 100%;
+    // compensate for the size of the navbar
+    margin-right: -@navbar-max-width;
+  }
+}
+
+.menu {
+  display: flex;
+}
+
+.content {
+  position: relative;
+
+
+  // mobile
+  @media (max-width: @grid-float-breakpoint) {
+    min-width: 100%;
+    margin-top: @navbar-mobile-height;
+
+    // when the menu is shown
+    &__overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+
+      background-color: @content-overlay-color;
+    }
+  }
+
+  // nice shadow on left side
+  box-shadow: 0 0 14px 0 rgba(0,0,0,0.33);
+
+  @media (min-width: @grid-float-breakpoint) {
+    z-index: 1;
+  }
+}
+
+#main_article {
+  margin-bottom: 100px;
+}
+
+// TODO: this is a bit hacky, solve in different way?
+.pension-section h2 {
+  margin-bottom: 0;
+}

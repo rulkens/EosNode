@@ -1,0 +1,80 @@
+/*
+animation specific css
+*/
+
+.navbar {
+  &__item {
+
+    // back to normal state
+    transition: color .4s ease-in;
+
+
+    &:hover {
+      transition: color .1s ease-out;
+    }
+
+    &:after {
+      transition: right cubic-bezier(0.42, 1.05, 1, 1) 0.3s;
+
+      @media(max-width: @grid-float-breakpoint) {
+        display: none;
+      }
+    }
+
+    &--active:after{
+      @media(max-width: @grid-float-breakpoint) {
+        display: block;
+      }
+    }
+
+    i {
+      transition: color .6s ease-in-out;
+    }
+
+    &--notify {
+      i {
+
+        animation: notify-animation ease-out 1.3s;
+        animation-iteration-count: 3;
+        transform-origin: 25% 50%;
+        color: lighten(@brand-warning, 10%);
+      }
+
+      // wobble animation
+      @keyframes notify-animation{
+        0% {
+          transform:  rotate(0deg) ;
+        }
+        3% {
+          transform:  rotate(-8deg) ;
+        }
+        6% {
+          transform:  rotate(0deg) ;
+        }
+        14% {
+          transform:  rotate(30deg) ;
+        }
+        22% {
+          transform:  rotate(-30deg) ;
+        }
+        30% {
+          transform:  rotate(30deg) ;
+        }
+        38% {
+          transform:  rotate(-30deg) ;
+        }
+        46% {
+          transform:  rotate(30deg) ;
+        }
+        59% {
+          transform:  rotate(0deg);
+        }
+        100% {
+          transform:  rotate(0deg) ;
+        }
+      }
+
+
+    }
+  }
+}

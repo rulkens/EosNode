@@ -1,0 +1,22 @@
+/**
+convention: animation names starts with the type of animation and then the type of element it can
+be applied to
+**/
+
+.fade__button(@color, @amount: @fade-amount) {
+
+  //.fade(background-color);
+  transition: all @fade-speed ease-in;
+
+  background-color: @color;
+  &:hover {
+    // should this be part of this mixin?
+    text-decoration: none;
+    background-color: lighten(@color, @amount);
+    transition: all @fade-speed ease-out;
+  }
+}
+
+.fade(@type: all) {
+  transition: @type @fade-speed ease-out;
+}

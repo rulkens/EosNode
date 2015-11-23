@@ -1,0 +1,16 @@
+.navbar-mobile {
+  .visible-xs;
+  .hidden-sm;
+  .hidden-md;
+  .hidden-lg;
+
+  @media(max-width: @grid-float-breakpoint) {
+    left: 0;
+
+    transition: all @navbar-open-speed @navbar-open-easing;
+  }
+
+  .menu-opened & {
+    left: @navbar-max-width;
+  }
+}

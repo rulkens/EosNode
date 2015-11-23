@@ -1,0 +1,22 @@
+.content {
+  @media (max-width: @grid-float-breakpoint) {
+    position: relative;
+    left: -@navbar-max-width;
+
+    transition: all @navbar-open-speed @navbar-open-easing;
+
+    // when the menu has been opened, fade out a bit and make it unselectable
+    .menu-opened & {
+      //left: @navbar-max-width;
+      // fade out a bit
+      opacity: .7;
+      left: 0;
+    }
+  }
+
+}
+
+body.menu-opened {
+  // make sure no horizontal scrollbar is visible
+  overflow-x: hidden;
+}

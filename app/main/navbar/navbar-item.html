@@ -1,0 +1,15 @@
+<li>
+    <div ng-switch="item.route !== '#'">
+        <a href="{{ item.route }}"
+           ui-sref="{{item.route}}" ui-sref-active="navbar__item--active"
+           class="navbar__item"
+           ng-class="(item.notify ? 'navbar__item--notify' : '') + ' ' + 'navbar__item--' + item.id"
+
+           ng-click="nb.closeMenu()">
+
+            <i class="zmdi zmdi-hc-lg" ng-class="'zmdi-' + item.icon"></i>
+            {{ item.label }}
+            <paper-ripple fit></paper-ripple>
+        </a>
+    </div>
+</li>

@@ -1,0 +1,16 @@
+@loader-height: 2px;
+@loader-color: @brand-primary;
+
+.loader {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: @loader-height;
+
+  &__bar {
+    background-color: @loader-color;
+    width: 100%;
+    height: 100%;
+  }
+}

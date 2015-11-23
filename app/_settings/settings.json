@@ -1,0 +1,80 @@
+{
+  "paths" : {
+    "src"  : {
+      "app"         : "app/",
+      "js"          : "app/",
+      "components"  : "app/",
+      "less"        : "app/_style/",
+      "views"       : "app/_views/",
+      "images"      : "app/_images/",
+      "api"         : "app/_settings/api/",
+      "content"     : {
+        "main"      : "content/",
+        "common"    : "content/common/"
+      },
+      "templates"   : "templates/"
+    },
+    "dest" : {
+      "main"        : "public/",
+      "index"       : "public/",
+
+      "css"         : "public/style/",
+      "js"          : "public/script/",
+      "views"       : "public/templates/",
+      "images"      : "public/images/",
+      "fonts"       : "public/style/fonts/",
+
+      "api"         : "public/api/",
+      "content"     : "public/content/"
+    },
+    "public" : {
+      "css"         : "style/",
+      "js"          : "script/",
+      "views"       : "templates/",
+      "images"      : "images/",
+      "fonts"       : "style/fonts/",
+
+      "api"         : "api/"
+    },
+    "tmp" : {
+      "main"        : ".tmp/",
+      "less"        : ".tmp/less/",
+      "components"  : ".tmp/less/components/"
+    },
+
+    "settings"      : "_settings/"
+  },
+  "files" : {
+    "src"  : {
+      "html" : {
+        "main"      : "index.html"
+      },
+      "less" : {
+        "main"      : "main.less",
+        "icons"     : "pensioen123-icons/list.less"
+      }
+    },
+    "dest" : {
+      "js" : {
+        "app"       : "app",
+        "vendor"    : "vendor",
+        "head"      : "head"
+      },
+      "html" : {
+        "main"      : "index.html"
+      },
+      "css" : {
+        "main"      : "main.css"
+      }
+    },
+    "vendor" : "vendor.json"
+  },
+
+  "versions" : {
+    "default"       : "main"
+  },
+  "env" : {
+    "default"       : "dev"
+  },
+  "globalDefs"      : ""
+}

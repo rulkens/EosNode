@@ -1,0 +1,5 @@
+{
+  "isDevelopment": false,
+  "cacheBust" : true,
+  "appRoot" : "/"
+}

@@ -1,0 +1,27 @@
+#main_view {
+  transition: left cubic-bezier(0.42, 1.05, 1, 1) 0.3s, opacity ease-in 0.3s;
+
+  &.ng-enter {
+    opacity: 0;
+    position: relative;
+    left: 20px;
+
+    &-active {
+      opacity: 1;
+      left: 0;
+    }
+  }
+
+  &.ng-hide {
+    opacity: 0;
+  }
+
+  &.ng-leave {
+    opacity: .5;
+
+    &-active {
+      opacity: .1;
+    }
+  }
+}
+

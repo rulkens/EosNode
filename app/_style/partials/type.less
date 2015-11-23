@@ -1,0 +1,39 @@
+/**
+all typography specific styles go here
+*/
+body {
+  -webkit-font-smoothing: antialiased; // for crisper, thinner text
+}
+
+h1, h2, {
+  font-weight: normal;
+}
+
+h1 {
+  color: @brand-primary;
+  font-size: 30px;
+}
+
+h2, h3 {
+  color: @brand-secondary;
+}
+
+h2 {
+  font-size: 24px;
+  padding-bottom: 24px;
+
+  // little helper for headings with a divider
+  &.with-divider {
+    // border
+    border-bottom: 1px solid @bottom-border-color;
+  }
+}
+
+
+h3 {
+  font-size: 18px;
+}
+
+p {
+  line-height: 1.8;
+}

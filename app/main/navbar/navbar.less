@@ -1,0 +1,151 @@
+
+// main navigation bar, is hidden by default on mobile, shown in desktop version
+.navbar {
+  position: relative;
+  background-color: @navbar-default-bg;
+  max-width: @navbar-max-width;
+  min-width: @navbar-min-width;
+  padding: @navbar-padding;
+
+  // Prevent floats from breaking the navbar
+  &:extend(.clearfix all);
+
+  // make sure it spans the complete height of the container
+  &__container {
+    display: flex;
+  }
+
+  flex: 1;
+
+  & ul {
+    padding: 0; // clear default padding
+  }
+
+  & li {
+    list-style-type: none;
+    display: block;
+  }
+
+  // specific items
+  &__item {
+    position: relative;
+
+    padding: @nav-link-padding;
+    display: block;
+
+    //color: @navbar-default-link-color;
+    color: fadeout(@navbar-default-link-color, @navbar-fade-text);
+
+    &:hover, &:focus,
+    .navbar:hover &:hover {
+      color: @navbar-default-link-color;
+      text-decoration: none;
+    }
+
+    .navbar:hover & {
+      color: fadeout(@navbar-default-link-color, @navbar-fade-text/2);
+    }
+
+    // white triangle on the right side
+    // TODO: move to a mixin?
+    &:after {
+      background-color: @navbar-active-color;
+      content: "";
+      width: @navbar-active-size;
+      height: @navbar-active-size;
+      position: absolute;
+      top: 50%;
+      margin-top: -@navbar-active-size / 2;
+      transform: rotate(45deg);
+      z-index: 2;
+
+      .menu-opened & {
+        // reset z-index to be under the content overlay
+        z-index: 0;
+      }
+
+      right: -@navbar-padding-right - (1/sqrt(2) * @navbar-active-size*2);
+
+    }
+
+    &--active:after {
+      right: -@navbar-padding-right - (1/sqrt(2) * @navbar-active-size);
+    }
+
+    // TODO: implement this on the same level as the item, otherwise it's confusing
+    // this is done now because of ui-sref-active
+    &--active {
+
+      color: @navbar-default-link-color;
+
+      &:hover {
+        color: @navbar-default-link-hover-color;
+        text-decoration: none;
+      }
+
+    }
+
+    &--close {
+
+      li& > a {
+        color: @navbar-item-close-color;
+
+        & > i {
+          color: @navbar-item-close-icon-color;
+        }
+      }
+    }
+  }
+
+  // specific style for the main area of the navbar
+  &--main {
+
+    & > li {
+      border-bottom: 1px solid lighten(@brand-primary, 30%);
+
+      & a > i {
+        width: @navbar-main-icon-size;
+        margin-right: @navbar-icon-size-with-padding - @navbar-main-icon-size;
+      }
+    }
+  }
+
+  // specific style for the secondary area of the navbar (with small icons)
+  &--secondary {
+    font-size: 14px;
+    margin-top: 20px;
+
+    & > li a {
+      // smaller margins
+      padding-bottom: 10px;
+      padding-top: 10px;
+
+      & > i {
+        width: @navbar-secondary-icon-size;
+        margin-right: @navbar-icon-size-with-padding - @navbar-secondary-icon-size;
+      }
+    }
+  }
+
+  // search box
+  &__search {
+    position: relative;
+
+    margin-top: 40px;
+    margin-bottom: 20px;
+
+    & input {
+      font-size: 14px;
+      padding: @navbar-search-padding 32px @navbar-search-padding @navbar-search-padding;
+      width: 100%;
+    }
+
+    & i {
+      color: @navbar-default-bg;
+      position: absolute;
+      right: @navbar-search-padding*2 + -1px;
+      top: @navbar-search-padding - 2px;
+    }
+  }
+}
+

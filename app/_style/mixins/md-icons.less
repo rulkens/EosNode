@@ -1,0 +1,14 @@
+.md-icon-container() {
+  font: normal normal normal 14px/1 'Material-Design-Iconic-Font';
+}
+
+.md-icon(@var, @size: 20px){
+  display: inline-block;
+  font: normal normal normal 14px/1 'Material-Design-Iconic-Font';
+  vertical-align: middle;
+  font-size: @size;
+
+  &:before {
+    content: @var;
+  }
+}

@@ -1,0 +1,41 @@
+// small mobile navigation bar
+.navbar-mobile {
+  height: @navbar-mobile-height;
+
+  position: fixed;
+  width: 100%;
+  z-index: 1;
+
+  &__item {
+    float: left;
+    padding: @navbar-mobile-padding;
+    height: @navbar-mobile-height;
+
+    &--icon {
+      .fade__button(@navbar-default-bg);
+      color: @navbar-active-color;
+      //background-color: @navbar-default-bg;
+
+      cursor: pointer;
+    }
+
+    &--menu {
+      padding: 12px 22px;
+      color: @navbar-active-color;
+      background-color: @navbar-mobile-menu-bg-color;
+    }
+
+    &--logo {
+      float: none;
+      background-color: #00517d;
+      width: 100%;
+
+      & > img {
+        margin-left: 10px;
+        height: 100%;
+      }
+    }
+  }
+
+
+}

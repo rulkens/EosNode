@@ -1,0 +1,46 @@
+[
+  {
+    "src": "node_modules/jquery/dist/jquery.js",
+    "cdn": "https://code.jquery.com/jquery-2.1.4.min.js"
+  },
+  {
+    "src": "node_modules/angular/angular.js",
+    "cdn": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular.min.js"
+  },
+  {
+    "src": "node_modules/angular-animate/angular-animate.js",
+    "cdn": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-animate.min.js"
+  },
+  {
+    "src": "node_modules/angular-resource/angular-resource.js",
+    "cdn": "https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.4.5/angular-resource.min.js"
+  },
+  {
+    "src": "node_modules/angular-ui-router/build/angular-ui-router.js",
+    "cdn": "https://cdnjs.cloudflare.com/ajax/libs/angular-ui-router/0.2.15/angular-ui-router.js"
+  },
+  {
+    "src": "node_modules/angular-notify/dist/angular-notify.js",
+    "cdn": ""
+  },
+  {
+    "src": "node_modules/angular-tiny-eventemitter/dist/angular-tiny-eventemitter.js",
+    "cdn": ""
+  },
+  {
+    "src": "node_modules/angular-loading-bar/build/loading-bar.js",
+    "cdn": "https://cdnjs.cloudflare.com/ajax/libs/angular-loading-bar/0.8.0/loading-bar.min.js"
+  },
+  {
+    "src": "node_modules/angular-i18n/angular-locale_nl-nl.js",
+    "cdn": ""
+  },
+  {
+    "src": "node_modules/ng-lodash/build/ng-lodash.js",
+    "cdn": ""
+  },
+  {
+    "src": "node_modules/angular-material/angular-material.js",
+    "cdn": ""
+  }
+]

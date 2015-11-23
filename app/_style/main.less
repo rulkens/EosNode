@@ -1,0 +1,41 @@
+/**
+  main CSS file for SPF Portal
+
+  we are using BEM (Block-Element-Modifier) to structure the CSS
+  https://css-tricks.com/bem-101/
+
+**/
+// The directory of node_modules, where for example bootstrap and material design iconic font are located
+// NOTE: this directory is relative to your less temporary (usually /tmp/less/) directory, since these files are pre-parsed to replace
+// variables!!
+@node-module-dir: '../../../node_modules/';
+
+// bootstrap
+@import "bootstrap/bootstrap";
+
+// mixins
+@import "mixins/md-icons";
+@import "mixins/loops";
+@import "mixins/animations";
+
+// icons from material design iconic font
+@import "material-design-iconic-font/material-design-iconic-font";
+
+// loading bar
+@import "angular-loading-bar/loading-bar";
+
+// notify
+@import "angular-notify/angular-notify";
+
+// material design
+@import "@{node-module-dir}angular-material/angular-material.css";
+
+// NOTE: these imports require less-plugin-glob
+
+// custom partials
+@import "partials/**";
+
+// components
+@import "components/**/**";
+
+// some other imports

@@ -1,0 +1,10 @@
+<nav id="navigation" class="navbar">
+    <ul ng-repeat="menu in nb.menus" ng-class="'navbar--' + menu.id">
+        <pir-navbar-item ng-repeat="item in menu.items"></pir-navbar-item>
+    </ul>
+
+    <!--<div class="navbar__search">-->
+        <!--<input type="text" placeholder="Zoek op trefwoord"/>-->
+        <!--<i class="zmdi zmdi-hc-2x zmdi-search"></i>-->
+    <!--</div>-->
+</nav>

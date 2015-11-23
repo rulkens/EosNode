@@ -1,0 +1,11 @@
+{
+  "name": "EOS",
+  "title" : "EOS - play with that light",
+  "logo": {
+    "normal": "eos-logo.svg",
+    "small": "eos-logo-simple.svg",
+    "favicon": "eos.ico"
+  },
+
+  "style": {}
+}
