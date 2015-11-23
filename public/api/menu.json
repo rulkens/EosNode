@@ -1,0 +1,25 @@
+[
+  {
+    "id": "main",
+    "items": [
+      {
+        "id": "close",
+        "route": "#",
+        "icon": "close",
+        "label":"close menu"
+      },
+      {
+        "id": "home",
+        "route": "index",
+        "icon": "home",
+        "label":"Home"
+      },
+      {
+        "id": "help",
+        "route": "help",
+        "icon": "help",
+        "label":"Help"
+      }
+    ]
+  }
+]

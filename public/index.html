@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<!--[if lt IE 7]>      <html class="no-js lt-ie9 lt-ie8 lt-ie7"> <![endif]-->
+<!--[if IE 7]>         <html class="no-js lt-ie9 lt-ie8"> <![endif]-->
+<!--[if IE 8]>         <html class="no-js lt-ie9"> <![endif]-->
+<!--[if gt IE 8]><!--> <html class="no-js"> <!--<![endif]-->
+<head>
+    <title>EOS - play with that light</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+    <!-- favicons -->
+    <link rel="shortcut icon" href="/images/favicon.ico" type="image/x-icon">
+    <link rel="icon" href="/images/favicon.ico" type="image/x-icon">
+
+    <!-- for HTML5 routing -->
+    <base href="/"/>
+
+    <!-- styles -->
+    <link rel="stylesheet" href="/style/main.css">
+
+    <!-- scripts (head) -->
+    <script>
+        var PirGlobal = PirGlobal || {};
+
+        PirGlobal.activeProfile = {};
+
+        PirGlobal.activeProfile.dossierGuid = '@@dossierGuid';
+        PirGlobal.appSettings = {};
+
+        PirGlobal.appSettings.isDevelopment = true;
+        PirGlobal.appSettings.cacheBust = false;
+
+        PirGlobal.appSettings.appRoot = '/';
+
+        
+    </script>
+
+    <!-- head:js -->
+    <!-- endinject -->
+
+    <!-- HTML5 components -->
+    <link rel="import" href="https://www.polymer-project.org/0.5/components/paper-ripple/paper-ripple.html">
+
+</head>
+<body ng-app="main" ng-controller="MenuController as menu" ng-class="{ 'menu-opened': menu.menuOpened }">
+<div id="main">
+    <div class="menu">
+        <div pir-navbar-mobile menu="menu"></div>
+        <div pir-navbar class="navbar__container" menu="menu"></div>
+    </div>
+
+    <div class="content">
+        <div class="container">
+            <div class="container__logo">
+                <a href="/" ui-sref="/">
+                    <img src="/images/eos-logo.svg" alt="EOS - play with that light"/>
+                </a>
+            </div>
+            <article role="article" id="main_article">
+                <div ui-view id="main_view"></div>
+            </article>
+        </div>
+
+        <div class="content__overlay" ng-click="menu.close()" ng-show="menu.menuOpened"></div>
+    </div>
+</div>
+
+<!-- scripts (main and vendor) -->
+<script src="/script/vendor.js"></script>
+<script src="/script/app.js"></script>
+
+
+</body>
+</html>
