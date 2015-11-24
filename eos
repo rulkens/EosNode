@@ -1,0 +1,6 @@
+#!/usr/bin/env node
+var _ = require('lodash'),
+    settings = require('./settings'),
+    argv = require('minimist')(process.argv.slice(2)),
+    program = require('./lib/eos/scheduler.load')(argv._),
+    eos = require('./lib/eos')(_.extend({}, settings, { program : program }));
