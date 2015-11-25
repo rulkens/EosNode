@@ -8,88 +8,97 @@
  my first foray into RxJS, and I like it!
  **/
 
-var Rx         = require('rx'),
-    noise      = require('../lib/eos/util.noise'),
-    Light      = require('../lib/eos/light'),
-    ColorLight = require('../lib/eos/light.color'),
-    Api        = require('../lib/eos/api'),
-    settings   = require('../settings'),
-    util       = require('../lib/eos/util'),
-    colorUtil  = require('../lib/eos/util.color');
+var Rx                   = require('rx'),
 
-var fps           = 60.0,
-    waveLength    = 3.0, // in seconds
-    totalLength   = 20.0, // in seconds
-    attackLength  = 2.0,
-    releaseLength = 4.0;
-
-let attack = fps * attackLength;    // in frames
-let release = fps * releaseLength;
-let total = fps * totalLength;
+    ColorLight           = require('../lib/eos/light.color'),
+    Api                  = require('../lib/eos/api'),
+    settings             = require('../settings'),
+    util                 = require('../lib/eos/util'),
+    colorUtil            = require('../lib/eos/util.color'),
+    rxUtil               = require('../lib/eos/util.rx'),
+    lightObservable      = require('../lib/eos/actions.rx/light.observable'),
+    colorLightObservable = require('../lib/eos/actions.rx/light.color.observable');
 
 var api = new Api(settings).connect();
 
-var loop = Rx.Observable.interval(1000 / fps); // a forever running loop
-var animation = loop.take(totalLength * fps); // a fixed length animation
+var lightSettings = [
+    {
+        length     : 200, // length of 100 sec
+        waveLength : 6,
+        transform  : {
+            scale  : .5,
+            offset : .5
+        },
+        envelope   : {
+            length : 100
+        },
+        light      : {
+            position : {
+                base : .05
+            }
+        }
+    },
+    //{
+    //    delay      : 5,
+    //    length     : 200,
+    //    waveLength : 10,
+    //    transform  : {
+    //        scale  : .5,
+    //        offset : .5
+    //    },
+    //    light      : {
+    //        intensity : 0.5
+    //    }
+    //},
+    {
+        waveLength : 5,
+        length     : 200,
+        transform  : {
+            scale  : .5,
+            offset : .5
+        },
+        light      : {
+            intensity : .3,
+            position  : {
+                base      : .9,
+                variation : .2
+            }
+        }
+    }
+];
 
-/*   #   #
- ##  ##
- ### ###
- */
-var sawtoothWave = loop
-    .take(totalLength * fps)
-    .map(squareWaveGenerator(waveLength, fps));
+var colorSettings = [
+    {
+        length : 200,
+        transform : {
+            scale : 0,
+            offset : 1
+        },
+        light: {
+            position: {
+                variation : .3,
+                speed : 1
+            },
+            hue : {
+                base : .1,
+                variation : .1
+            }
+        }
+    }
+];
 
-/*   #    ##
- ##   ###
- #### #####
- */
-var sineWave = loop
-    .take(totalLength * fps)
-    .map(sineWaveGenerator(waveLength, fps))
-    .map(transformWave({scale : 0.3, offset : 0.5}));
+var lights = lightSettings.map(settings => lightObservable(settings).map(light => light.result()));
+var colors = colorSettings.map(settings => colorLightObservable(settings).map(light => light.result()));
 
-var envelopedWave = sineWave
-    .map(envelopeGenerator(attack, release, total));
-
-var light1 = animation
-    .delay(6000)
-    .startWith(0)
-    .map(sineWaveGenerator(waveLength * 1.5, fps))  // breathing simulation
-    .map(transformWave({scale : 0.3, offset : 0.5}))
-    .map(envelopeGenerator(attack * 2, release, total))
-    .map(waveToLight({position : 0.2}))
-    .map(light => light.result());
-
-var light2 = envelopedWave
-    .map(waveToLight({position : 0.8}))
-    .map(light => light.result());
-
-var colorLight = envelopedWave
-    .delay(3000)
-    .map(waveToColorLight({color : 0xFF}))
-    .map(light => light.result());
-
-//var lightsCombined = Rx.Observable
-//    .merge(light1, light2)
-//    .map(util.sumIlluminances);
-
-var lightsCombined = light1
-    .combineLatest(light2, (light1, light2) => [light1, light2])
-    .map(util.sumIlluminances);
-
-var lightsSequence = light1.concat(light2);
-//.map(util.sumIlluminances);
-
-
-var hashes = envelopedWave.map(toHashes);
-
+var lightsCombined = rxUtil.combineLights(lights);
+var colorsCombined = rxUtil.combineColors(colors);
 
 // SUBSCRIBE FUNCTIONS
 // TODO: move to another file
-hashes.subscribe(console.log);
+//hashes.subscribe(console.log, e => console.log('error', e), () => console.log('finished!'));
 
-lightsCombined.subscribe(nextLight, errorLight, completedLight);
+lightsCombined.throttle(25).subscribe(nextLight, errorLight, completedLight);
+colorsCombined.throttle(25).subscribe(nextColor, errorColor, completedColor);
 
 // EXPERIMENTAL SERVER talk
 function nextLight (values) {
@@ -97,8 +106,8 @@ function nextLight (values) {
     api.lights.set(values);
 }
 
-function errorLight (error) {
-    console.error('ouch!');
+function errorLight (e) {
+    console.error('ouch!', e);
 }
 
 function completedLight (completed) {
@@ -106,7 +115,7 @@ function completedLight (completed) {
     api.disconnect();
 }
 
-colorLight.subscribe(nextColor, errorColor, completedColor);
+//colorLight.subscribe(nextColor, errorColor, completedColor);
 
 function nextColor (color) {
     //console.log('color', color);
@@ -120,95 +129,11 @@ function errorColor (e) {
 function completedColor (c) {
     console.log('Color sequence completed!');
 }
-
-/**
- * generates a square wave with a specific length
- * @param waveLength
- * @param fps
- * @returns {Function}
- */
-function squareWaveGenerator (waveLength, fps) {
-    return function (i) {
-        return {
-            x : i,
-            y : (i / waveLength % fps) / fps
-        }
-    }
-}
-
-function sineWaveGenerator (waveLength, fps) {
-    return function (i) {
-        return {
-            x : i,
-            y : .5 - .5 * Math.cos((i / waveLength % fps) / fps * Math.PI * 2)
-        }
-    }
-}
-
-/**
- * can transform with options { scale = 1, offset = 0 }
- * @param options
- * @returns {transform}
- */
-function transformWave (options) {
-    let o = options || {};
-    return function (wave) {
-        return {
-            x : wave.x,
-            y : (wave.y * (o.scale || 1)) + (o.offset || 0)
-        }
-    }
-}
-
-function envelopeGenerator (attack, release, total) {
-    return function (wave) {
-        let y = (wave.x < attack) // attack
-            ? wave.y * (wave.x / attack)
-            : (wave.x > total - release)  // release
-            ? wave.y * ((total - wave.x) / release)
-            : wave.y;
-        return {
-            x : wave.x,
-            y : y
-        }
-    }
-}
-
 /**
  * utility function for visualising the value on the command line
  * @param i
  * @returns {string}
  */
 function toHashes (i) {
-    return (new Array(Math.floor(i.y * 40))).join('#');
-}
-
-
-/**
- * convert a wave object { i, y } to a Light object
- */
-function waveToLight (options) {
-    var o = options || {};
-    return function (wave) {
-        var noiseval = noise.perlin2(0, wave.x * .005) * .2;
-        return new Light({intensity : wave.y, position : (o.position || 0.5) + noiseval});
-    }
-
-}
-
-function waveToColorLight (options) {
-    var o = options || {};
-    return function (wave) {
-        var posNoise = noise.perlin2(0, wave.x * .012) * .2,
-            hueNoise = noise.perlin2(0, (60 + wave.x) * .007) * .7,
-            hsv      = {h : (((hueNoise + 1) % 1) * 360), s : 70, v : 50},
-            c        = colorUtil.hsvToInt(hsv);
-
-        //console.log('c', hsv);
-        return new ColorLight({
-            color     : c,
-            intensity : wave.y,
-            position  : (o.position || 0.5) + posNoise
-        });
-    }
+    return (new Array(Math.floor(i * 40))).join('#');
 }
