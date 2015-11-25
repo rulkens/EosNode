@@ -8,12 +8,14 @@
  my first foray into RxJS, and I like it!
  **/
 
-var Rx       = require('rx'),
-    noise    = require('../lib/eos/util.noise'),
-    Light    = require('../lib/eos/light'),
-    Api      = require('../lib/eos/api'),
-    settings = require('../settings'),
-    util     = require('../lib/eos/util');
+var Rx         = require('rx'),
+    noise      = require('../lib/eos/util.noise'),
+    Light      = require('../lib/eos/light'),
+    ColorLight = require('../lib/eos/light.color'),
+    Api        = require('../lib/eos/api'),
+    settings   = require('../settings'),
+    util       = require('../lib/eos/util'),
+    colorUtil  = require('../lib/eos/util.color');
 
 var fps           = 60.0,
     waveLength    = 3.0, // in seconds
@@ -31,16 +33,16 @@ var loop = Rx.Observable.interval(1000 / fps); // a forever running loop
 var animation = loop.take(totalLength * fps); // a fixed length animation
 
 /*   #   #
-    ##  ##
-   ### ###
+ ##  ##
+ ### ###
  */
 var sawtoothWave = loop
     .take(totalLength * fps)
     .map(squareWaveGenerator(waveLength, fps));
 
 /*   #    ##
-    ##   ###
-   #### #####
+ ##   ###
+ #### #####
  */
 var sineWave = loop
     .take(totalLength * fps)
@@ -56,11 +58,16 @@ var light1 = animation
     .map(sineWaveGenerator(waveLength * 1.5, fps))  // breathing simulation
     .map(transformWave({scale : 0.3, offset : 0.5}))
     .map(envelopeGenerator(attack * 2, release, total))
-    .map(waveToLight({ position : 0.2 }))
+    .map(waveToLight({position : 0.2}))
     .map(light => light.result());
 
 var light2 = envelopedWave
-    .map(waveToLight({ position: 0.8 }))
+    .map(waveToLight({position : 0.8}))
+    .map(light => light.result());
+
+var colorLight = envelopedWave
+    .delay(3000)
+    .map(waveToColorLight({color : 0xFF}))
     .map(light => light.result());
 
 //var lightsCombined = Rx.Observable
@@ -72,20 +79,19 @@ var lightsCombined = light1
     .map(util.sumIlluminances);
 
 var lightsSequence = light1.concat(light2);
-    //.map(util.sumIlluminances);
+//.map(util.sumIlluminances);
 
 
 var hashes = envelopedWave.map(toHashes);
+
+
+// SUBSCRIBE FUNCTIONS
+// TODO: move to another file
 hashes.subscribe(console.log);
 
 lightsCombined.subscribe(nextLight, errorLight, completedLight);
+
 // EXPERIMENTAL SERVER talk
-
-function nextHashes (value) {
-    //console.log('value', value);
-    // talk to the server?
-}
-
 function nextLight (values) {
     //console.log('values', values);
     api.lights.set(values);
@@ -98,6 +104,21 @@ function errorLight (error) {
 function completedLight (completed) {
     console.log('light sequence completed!');
     api.disconnect();
+}
+
+colorLight.subscribe(nextColor, errorColor, completedColor);
+
+function nextColor (color) {
+    //console.log('color', color);
+    api.colors.set(color);
+}
+
+function errorColor (e) {
+    console.error('ouch! (in color)', e);
+}
+
+function completedColor (c) {
+    console.log('Color sequence completed!');
 }
 
 /**
@@ -162,9 +183,6 @@ function toHashes (i) {
     return (new Array(Math.floor(i.y * 40))).join('#');
 }
 
-noise.seed(Math.random());
-var noiseval = noise.perlin2(0, .3 * .001)[0];
-console.log('noiseval', noiseval);
 
 /**
  * convert a wave object { i, y } to a Light object
@@ -172,10 +190,25 @@ console.log('noiseval', noiseval);
 function waveToLight (options) {
     var o = options || {};
     return function (wave) {
-        var noiseval = noise.perlin2(0, wave.x * .002) * .2;
-        //var noiseval = noise.perlin2(0, i * .001)[0];
-        console.log('noiseval', noiseval);
-        return new Light({intensity : wave.y, position : o.position + noiseval || 0.5});
+        var noiseval = noise.perlin2(0, wave.x * .005) * .2;
+        return new Light({intensity : wave.y, position : (o.position || 0.5) + noiseval});
     }
 
+}
+
+function waveToColorLight (options) {
+    var o = options || {};
+    return function (wave) {
+        var posNoise = noise.perlin2(0, wave.x * .012) * .2,
+            hueNoise = noise.perlin2(0, (60 + wave.x) * .007) * .7,
+            hsv      = {h : (((hueNoise + 1) % 1) * 360), s : 70, v : 50},
+            c        = colorUtil.hsvToInt(hsv);
+
+        //console.log('c', hsv);
+        return new ColorLight({
+            color     : c,
+            intensity : wave.y,
+            position  : (o.position || 0.5) + posNoise
+        });
+    }
 }
