@@ -1,17 +1,19 @@
 /**
  * Experimenting a bit with converting leap motion to observable data
  */
-var _               = require('lodash'),
-    Rx              = require('rx'),
-    Color           = require('color'),
-    leapjs          = require('leapjs'),
-    util            = require('../lib/eos/util'),
-    colorUtil       = require('../lib/eos/util.color'),
-    rxUtil          = require('../lib/eos/util.rx'),
-    lightObservable = require('../lib/eos/actions.rx/light.color.observable'),
-    Api             = require('../lib/eos/api'),
-    settings        = require('../settings'),
-    ColorLight      = require('../lib/eos/light.color');
+var _                  = require('lodash'),
+    Rx                 = require('rx'),
+    Color              = require('color'),
+    leapjs             = require('leapjs'),
+    util               = require('../lib/eos/util'),
+    colorUtil          = require('../lib/eos/util.color'),
+    rxUtil             = require('../lib/eos/util.rx'),
+
+    Api                = require('../lib/eos/api'),
+    settings           = require('../settings'),
+    ColorLight         = require('../lib/eos/light.color'),
+    lightObservable    = require('../lib/eos/actions.rx/light.color.observable'),
+    sparklesObservable = require('../lib/eos/actions.rx/sparkles.color.observable');
 
 //var oLeap = require('../lib/eos/util.leap.rx');
 var api = new Api(settings).connect();
@@ -74,19 +76,19 @@ var rightLight = lightObservable(lightSettings[1])
     .combineLatest(rightHandToLight, mergeLightSettings)
     .map(toResult);
 
+var sparkles = sparklesObservable();
+
 var colorsCombined = rxUtil
-    .combineColors([leftLight, rightLight])
+    .combineColors([leftLight, rightLight, sparkles])
     .throttle(16)
-    .scan(fadeColors, ColorLight.defaults.numLights);
+    .scan(colorUtil.fadeColors, ColorLight.defaults.numLights);
 
 connected.subscribe(() => console.log('connected'));
 streamingStarted.subscribe(() => console.log('streamingStarted'));
 streamingStopped.subscribe(() => console.log('streamingStopped'));
 
 // send to the api
-colorsCombined.subscribe(function toApi (light) {
-    api.colors.set(light);
-});
+colorsCombined.subscribe(toApi);
 
 // start it off (
 // TODO: we should do this automatically in the observables
@@ -152,22 +154,8 @@ function toResult (light) {
     return light.result();
 }
 
-function fadeColors (prevColors, colors) {
-    //console.log('prevColors', prevColors);
-    // colors is an array of
-    return _.zipWith(prevColors, colors, function (prevColor, color) {
-        // perhaps optimize this :)
-        var p = colorUtil.intToColor(colorUtil.rgbToInt(colorUtil.intToRgb(prevColor).map(val => Math.max(0, val - 1))));
-        var c = colorUtil.intToColor(color);
-        var n; // new color
-        //console.log('p', p);
 
-        //console.log('c.luminosity()', c.luminosity());
-        //return color;
-        n = p.mix(c, .96)//.darken(.9);
-        //n.darken(.01)
-        //console.log('n', n);
-        // blend and darken
-        return colorUtil.colorToInt(n);
-    });
+
+function toApi (light) {
+    api.colors.set(light);
 }
