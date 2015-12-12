@@ -129,11 +129,3 @@ function errorColor (e) {
 function completedColor (c) {
     console.log('Color sequence completed!');
 }
-/**
- * utility function for visualising the value on the command line
- * @param i
- * @returns {string}
- */
-function toHashes (i) {
-    return (new Array(Math.floor(i * 40))).join('#');
-}
