@@ -2,7 +2,7 @@
  * Experimenting a bit with converting leap motion to observable data
  */
 var _          = require('lodash'),
-    Rx = require('Rx'),
+    Rx         = require('Rx'),
     Color      = require('color'),
     settings   = require('../settings'),
     util       = require('../lib/eos/util'),
@@ -18,34 +18,37 @@ var _          = require('lodash'),
 var api = new Api(settings).connect();
 
 // custom light settings
-var lightSettings = [
-    {
+var lightSettings = {
+    left  : {
         length     : 200,
         waveLength : 3.0,
-        wave  : {
+        wave       : {
             scale  : 0.5,
             offset : 0.5
         }
     },
-    {
+    right : {
         length     : 200,
         waveLength : 3.1,
-        wave  : {
+        wave       : {
             scale  : 0.5,
             offset : 0.5
         }
     }
-];
+};
 
-var sparkles = Sparkles();
+var sparklesSettings = {
+    chance: .1,
+    color: 0xFF0000
+};
 
 var colorsCombined = rxUtil
-    .combineColors([sparkles, leftAppear(), rightAppear()])
+    .combineColors([sparklesAppear(sparklesSettings), leftAppear(), rightAppear()])
     .throttle(16)
     // fade stuff
     .scan(colorUtil.fadeColors, Light.defaults.numLights)
-    // start empty
-    //.startWith(Light.allLightsOff);
+// start empty
+//.startWith(Light.allLightsOff);
 
 // DEBUG INFO
 leap.connected().subscribe(() => console.log('connected'));
@@ -60,24 +63,38 @@ leap.handOn('right').subscribe(() => console.log('right hand animation'));
 colorsCombined.subscribe(toApi);
 
 
-var off = Light.off().map(toResult);
+var off = Light.off().map(toLightResult);
 off.subscribe(toApi);
 
 
 // UTILITY FUNCTIONS
 
-function leftAppear(){
+function leftAppear () {
     return leap.handState('left')
         //.do(() => console.log('left hand state changed'))
-        .flatMapLatest(stateToLight$('left'))
-        .map(toResult);
+        .flatMapLatest(stateToLight$('left', lightSettings.left))
+        .map(toLightResult);
 }
 
-function rightAppear (){
+function rightAppear () {
     return leap.handState('right')
-        .flatMapLatest(stateToLight$('right'))
-        .map(toResult);
+        .flatMapLatest(stateToLight$('right', lightSettings.right))
+        .map(toLightResult);
 }
+
+function sparklesAppear () {
+    return leap.handsState()
+        .map(state => !state) // inverse state
+        .flatMapLatest(stateToSparkles$())
+}
+
+leap.handsState().map(state => !state).subscribe(function (state) {
+    if (state) {
+        console.log('one or more hands on');
+    } else {
+        console.log('one or more hands off');
+    }
+});
 
 /**
  * map a hand to light settings
@@ -102,8 +119,8 @@ function mapHandToLight (hand) {
         size     = (1 - hand.grabStrength),
         color    = Color({hue : hue, saturation : 100 * zPos, value : 100});
 
-    console.log('zPos', zPos);
-    return {position : yPos, intensity: zPos, color : colorUtil.colorToInt(color)};
+    //console.log('zPos', zPos);
+    return {position : yPos, intensity : zPos, color : colorUtil.colorToInt(color)};
 }
 
 function handToLight$ (type) {
@@ -116,9 +133,9 @@ function handToLight$ (type) {
  * copy properties from the settings object into a new light object and return it
  * @param light
  * @param settings
- * @returns {Light$}
+ * @returns {ColorLight}
  */
-function mergeLightSettings (light, settings) {
+function overrideLightSettings (light, settings) {
     // aiai
     var lightCopy = light.clone();
     _.extend(lightCopy, settings);
@@ -130,19 +147,21 @@ function mergeLightSettings (light, settings) {
  * @param state
  * @returns {Light$}
  */
-function stateToLight$(handType) {
-    return function (state){
-        return state ?
-            // if on
-            Light({ wave : { offset : .5 } })
-                .combineLatest(handToLight$(handType), mergeLightSettings)
-                // TODO: make sure the light goes off as the last action
-                .concat(Light.off())
-                .finally(() => console.log('light on finished!'))
-            // if off
-            : Light.off()
-            .catch((e) => console.log('light off err', e))
-            .finally(() => console.log('light off finished!'));
+function stateToLight$ (handType, lightSettings) {
+    var lightOn = Light(lightSettings)
+        .combineLatest(handToLight$(handType), overrideLightSettings)
+        .concat(Light.off());
+
+    return stateToObservable(lightOn, Light.off());
+}
+
+function stateToSparkles$ (settings) {
+    return stateToObservable(Sparkles({ chance: .01}).concat(Light.off()), Light.off());
+}
+
+function stateToObservable (observableOn, observableOff) {
+    return function (state) {
+        return state ? observableOn : observableOff
     }
 }
 
@@ -150,7 +169,7 @@ function filterConfidence (hand) {
     return hand.confidence > .3;
 }
 
-function toResult (light) {
+function toLightResult (light) {
     //console.log('light', light);
     return light.result();
 }
