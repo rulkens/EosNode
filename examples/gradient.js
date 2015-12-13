@@ -4,7 +4,8 @@
  * here, we apply gamma and color correction specific to the LED strips we use
  *
  */
-var settings = require('../settings'),
+var _ = require('lodash'),
+    settings = require('../settings'),
     Api      = require('../lib/eos/api'),
     util      = require('../lib/eos/util/util'),
     colorUtil  = require('../lib/eos/util/util.color.js'),
@@ -14,14 +15,7 @@ var settings = require('../settings'),
 
 var api   = new Api(settings).connect();
 
-//swipe.subscribe(toApi);
-//
-//function toApi (light) {
-//    //console.log('light', light);
-//    api.colors.set(light);
-//}
-
-var g = gradients.blackBody;
+var g = gradients.aquaMarine;
 
 var colors = util
     .range(numLights)
