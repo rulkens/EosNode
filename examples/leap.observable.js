@@ -62,7 +62,7 @@ var colorsCombined = rxUtil
     .combineColors([leftLight, rightLight])
     .throttle(16)
     // fade stuff
-    .scan(colorUtil.fadeColors, Light.defaults.numLights)
+    .scan(colorUtil.fadeColors({ fastOn : true }), Light.defaults.numLights)
     // start empty
     .startWith(Light.allLightsOff);
 
