@@ -13,9 +13,9 @@ var Rx                   = require('rx'),
     ColorLight           = require('../lib/eos/light.color'),
     Api                  = require('../lib/eos/api'),
     settings             = require('../settings'),
-    util                 = require('../lib/eos/util'),
-    colorUtil            = require('../lib/eos/util.color'),
-    rxUtil               = require('../lib/eos/util.rx'),
+    util                 = require('../lib/eos/util/util'),
+    colorUtil            = require('../lib/eos/util/util.color.js'),
+    rxUtil               = require('../lib/eos/util/util.rx.js'),
     lightObservable      = require('../lib/eos/actions.rx/light.observable'),
     colorLightObservable = require('../lib/eos/actions.rx/light.color.observable');
 
