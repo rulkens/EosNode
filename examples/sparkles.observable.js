@@ -5,10 +5,16 @@ var settings  = require('../settings'),
     Api       = require('../lib/eos/api'),
     colorUtil = require('../lib/eos/util/util.color.js'),
     Sparkles  = require('../lib/eos/actions.rx/sparkles.color.observable'),
-    numLights = require('../lib/eos/light.color').defaults.numLights;
+    numLights = require('../lib/eos/light.color').defaults.numLights,
+    palettes = require('../lib/eos/gradients');
 
 var api      = new Api(settings).connect(),
-    sparkles = Sparkles({color : 0x77FFFF})
+    // default
+    //sparkles = Sparkles()
+    // with a specific color
+    //sparkles = Sparkles({color: 0xFF0000}) // red
+    // with palette
+    sparkles = Sparkles({palette : palettes.crazyOrange })
     // fade
         .scan(colorUtil.fadeColors({fastOn : true}), numLights);
 
