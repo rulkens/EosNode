@@ -8,7 +8,7 @@ var settings  = require('../settings'),
     numLights = require('../lib/eos/light.color').defaults.numLights,
     palettes = require('../lib/eos/gradients');
 
-var api      = new Api(settings).connect(),
+var api      = Api(settings),
     // default
     //sparkles = Sparkles()
     // with a specific color

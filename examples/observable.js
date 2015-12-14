@@ -19,7 +19,7 @@ var Rx                   = require('rx'),
     lightObservable      = require('../lib/eos/actions.rx/light.observable'),
     colorLightObservable = require('../lib/eos/actions.rx/light.color.observable');
 
-var api = new Api(settings).connect();
+var api = Api(settings);
 
 var lightSettings = [
     {

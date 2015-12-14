@@ -13,11 +13,12 @@ var lightSettings = {
         offset: .5
     },
     light : {
+        intensity: .1,
         color : 0xFFFF00
     }
 };
 
-var api    = new Api(settings).connect(),
+var api = Api(settings),
     // default
     //light = Light()
     // with a specific color

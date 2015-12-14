@@ -15,7 +15,7 @@ var _          = require('lodash'),
     Sparkles   = require('../lib/eos/actions.rx/sparkles.color.observable');
 
 //var oLeap = require('../lib/eos/util.leap.rx');
-var api = new Api(settings).connect();
+var api = Api(settings);
 
 // custom light settings
 var lightSettings = {

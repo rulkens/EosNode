@@ -8,9 +8,12 @@ var settings  = require('../settings'),
     numLights = require('../lib/eos/light.color').defaults.numLights,
     palettes = require('../lib/eos/gradients');
 
-var api      = new Api(settings).connect(),
+var settings = {
+
+}
+var api      = Api(settings),
     // default
-    ripple = Ripple()
+    ripple = Ripple(settings)
     // with a specific color
     //ripple = Ripple({color: 0xFF0000}) // red
     // with palette

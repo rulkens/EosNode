@@ -10,7 +10,7 @@ var _            = require('lodash'),
     numLights    = require('../lib/eos/light.color').defaults.numLights,
     gradientList = require('../lib/eos/gradients');
 
-var api      = new Api(settings).connect();
+var api      = Api(settings);
 
 const TIME_PER_GRADIENT = 20; // in seconds
 

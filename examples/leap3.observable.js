@@ -1,23 +1,21 @@
 /**
  * Experimenting a bit with converting leap motion to observable data
  */
-var _          = require('lodash'),
-    Rx         = require('Rx'),
-    Color      = require('color'),
-    settings   = require('../settings'),
-    util       = require('../lib/eos/util/util'),
-    colorUtil  = require('../lib/eos/util/util.color.js'),
-    rxUtil     = require('../lib/eos/util/util.rx.js'),
-    Api        = require('../lib/eos/api'),
-    ColorLight = require('../lib/eos/light.color'),
-    leap       = require('../lib/eos/actions.rx/leap-motion.observable'),
-    Light      = require('../lib/eos/actions.rx/light.color.observable'),
-    Sparkles   = require('../lib/eos/actions.rx/sparkles.color.observable'),
-    Ripple     = require('../lib/eos/actions.rx/ripple.color.observable'),
-    numLights  = require('../lib/eos/light.color').defaults.numLights;
+var _         = require('lodash'),
+    Rx        = require('Rx'),
+    Color     = require('color'),
+    settings  = require('../settings'),
+    util      = require('../lib/eos/util/util'),
+    colorUtil = require('../lib/eos/util/util.color.js'),
+    rxUtil    = require('../lib/eos/util/util.rx.js'),
+    Api       = require('../lib/eos/api'),
+    leap      = require('../lib/eos/actions.rx/leap-motion.observable'),
+    Light     = require('../lib/eos/actions.rx/light.color.observable'),
+    Sparkles  = require('../lib/eos/actions.rx/sparkles.color.observable'),
+    Ripple    = require('../lib/eos/actions.rx/ripple.color.observable'),
+    numLights = require('../lib/eos/light.color').defaults.numLights;
 
-//var oLeap = require('../lib/eos/util.leap.rx');
-var api = new Api(settings).connect();
+var api = Api(settings);
 
 var settings = {
     confidence : .3,
@@ -27,7 +25,14 @@ var settings = {
         color  : 0xFFFFFF
     },
 
-    ripple : {},
+    ripple : {
+        length     : .7,
+        waveLength : .7,
+        light      : {
+            intensity : .1,
+            color     : 0x110000
+        }
+    },
 
     lights : {
         left  : {
@@ -127,8 +132,8 @@ function handLight$ (handType, options) {
              * @returns {Function<LightSettings>}
              * @todo make this configurable
              */
-            function mapHandToLight (options){
-                return function(hand){
+            function mapHandToLight (options) {
+                return function (hand) {
                     if (!hand) return {intensity : 0}; // return a light that is off
 
                     // map Y to light Position

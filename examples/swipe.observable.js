@@ -5,7 +5,7 @@ var settings = require('../settings'),
     Api      = require('../lib/eos/api'),
     Swipe    = require('../lib/eos/actions.rx/swipe.observable');
 
-var api   = new Api(settings).connect(),
+var api   = Api(settings),
     swipe = Swipe({ color: 0x00FF00, size: 60 });
 
 swipe.subscribe(function (val) {

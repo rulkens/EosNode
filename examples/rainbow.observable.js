@@ -5,7 +5,7 @@ var settings = require('../settings'),
     Api      = require('../lib/eos/api'),
     Rainbow    = require('../lib/eos/actions.rx/rainbow.observable');
 
-var api   = new Api(settings).connect(),
+var api   = Api(settings),
     rainbow = Rainbow({});
 
 rainbow.subscribe(function (val) {

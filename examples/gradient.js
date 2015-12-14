@@ -13,7 +13,7 @@ var _ = require('lodash'),
     gradients = require('../lib/eos/gradients'),
     numLights = require('../lib/eos/light.color').defaults.numLights;
 
-var api   = new Api(settings).connect();
+var api   = Api(settings);
 
 var g = gradients.aquaMarine;
 
