@@ -14,7 +14,7 @@ var api      = Api(settings),
     // with a specific color
     //sparkles = Sparkles({color: 0xFF0000}) // red
     // with palette
-    sparkles = Sparkles({palette : palettes.crazyOrange })
+    sparkles = Sparkles({palette : palettes.instagram })
     // fade
         .scan(colorUtil.fadeColors({fastOn : true}), numLights);
 
