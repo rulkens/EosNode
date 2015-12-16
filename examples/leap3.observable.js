@@ -60,7 +60,8 @@ var colorsCombined = rxUtil
         rippleOnHandOn$('left', settings.ripple),
         rippleOnHandOn$('right', settings.ripple),
         handLight$('left', settings.lights.left),
-        handLight$('right', settings.lights.right)])
+        handLight$('right', settings.lights.right)
+    ])
     .throttle(16)
     // fade stuff
     .scan(colorUtil.fadeColors({fastOn : true}), numLights)
@@ -73,7 +74,7 @@ leap.streamingStarted().subscribe(() => console.log('streamingStarted'));
 leap.streamingStopped().subscribe(() => console.log('streamingStopped'));
 
 //leftAppear.subscribe(toApi);
-leap.handOn('left').subscribe(() => console.log('left hand animation'));
+leap.handOn('left').subscribe(() => console.log('left hand on'));
 leap.handOn('right').subscribe(() => console.log('right hand animation'));
 
 // send to the api
@@ -103,7 +104,7 @@ function handLight$ (handType, options) {
     function stateToLight$ (handType, lightSettings) {
 
         var lightOn = Light(lightSettings)
-            .combineLatest(handToLight$(handType), overrideLightSettings)
+            .withLatestFrom(handToLight$(handType), overrideLightSettings)
             .concat(Light.off());
 
         return stateToObservable(lightOn, Light.off());
@@ -133,24 +134,19 @@ function handLight$ (handType, options) {
              * @todo make this configurable
              */
             function mapHandToLight (options) {
+                var o = options || {};
+
                 return function (hand) {
                     if (!hand) return {intensity : 0}; // return a light that is off
 
                     // map Y to light Position
-                    var xPos     = hand.palmPosition[0],
-                        yPos     = (hand.palmPosition[1] - 100) / 350,
-                        zPos     = util.clip(1 - ((hand.palmPosition[2]) / 200)),
-                        yaw      = hand.yaw(),
-                        roll     = (hand.roll() / (Math.PI * 2)) + .5,
-                        rollNorm = (roll - .3) * 1.3,
-                        hue      = (roll * 360) % 360,
-                        //rotationAngle = hand.rotationAngle(),
+                    var pos   = normPalmPos(hand.palmPosition),
                         // hand grabstrength = intensity (more grabbing is less intensity)
-                        size     = (1 - hand.grabStrength),
-                        color    = Color({hue : hue, saturation : 100 * zPos, value : 100});
+                        size  = (1 - hand.grabStrength),
+                        color = rollToColor(hand.roll());
 
                     //console.log('zPos', zPos);
-                    return {position : yPos, intensity : zPos, color : colorUtil.colorToInt(color)};
+                    return {position : pos.y, intensity : util.clip(1 - pos.z), color : color};
                 }
             }
 
@@ -165,6 +161,7 @@ function handLight$ (handType, options) {
 
 function sparklesWhenNoHands$ (options) {
     return leap.handsState()
+        .startWith(false)
         .map(state => !state) // inverse state
         .flatMapLatest(stateToSparkles$(options));
 
@@ -175,11 +172,26 @@ function sparklesWhenNoHands$ (options) {
 
 function rippleOnHandOn$ (handType, rippleOptions) {
     return leap.handOn(handType)
+        .startWith(true)
+        .withLatestFrom(leap.hand(handType), function (o, hand) {
+            return hand;
+        }) // get the hand data
         .flatMapLatest(handOnToRipple$(rippleOptions));
 
-    function handOnToRipple$ (options) {
-        return function () {
-            return Ripple(options);
+    function handOnToRipple$ (rippleOptions) {
+        return function (hand) {
+            console.log('hand', hand.palmPosition);
+            return Ripple(
+                _.extend(rippleOptions,
+                    {
+                        position : normPalmPos(hand.palmPosition).y,
+                        light : {
+                            intensity: .1,
+                            //size: 5 * (1 - hand.grabStrength),
+                            color    : rollToColor(hand.roll())
+                        }
+                    })
+            );
         }
     }
 }
@@ -206,4 +218,20 @@ function toLightResult (light) {
 function toApi (light) {
     //console.log('light', light);
     api.colors.set(light);
+}
+
+function rollToColor (roll) {
+    var val = (roll / (Math.PI * 2)) + .5;
+    var hue = (val * 360) % 360;
+    return colorUtil.colorToInt(
+        Color({hue : hue, saturation : 100, value : 100})
+    );
+}
+
+function normPalmPos (palmPosition) {
+    return {
+        x : palmPosition[0] / 400,
+        y : (palmPosition[1] - 100) / 350,
+        z : (palmPosition[2]) / 200
+    }
 }
