@@ -17,16 +17,16 @@ var api = Api(settings),
 //    //console.log('val', val);
 //});
 
-light$.subscribe(toApi);
+api.connect(run);
+
+function run() {
+    light$.subscribe(toApi);
+
+    function toApi (colors){
+        api.colors.set(colors);
+    }
+}
 
 function toResult (light) {
     return light.result();
-}
-
-function toApi (colors){
-    if(api.connected){
-        api.colors.set(colors);
-    } else {
-        //console.log('api not connected!');
-    }
 }

@@ -18,13 +18,13 @@ var api      = Api(settings),
     // fade
         .scan(colorUtil.fadeColors({fastOn : true}), numLights);
 
-//sparkles.subscribe(function (val) {
-//    console.log('val', val);
-//});
+api.connect(run);
 
-sparkles.subscribe(toApi);
+function run (){
+    sparkles.subscribe(toApi);
 
-function toApi (light) {
-    //console.log('light', light);
-    api.colors.set(light);
+    function toApi (light) {
+        //console.log('light', light);
+        api.colors.set(light);
+    }
 }
