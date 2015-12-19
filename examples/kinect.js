@@ -38,7 +38,7 @@ kinect.on("osc", function onKinectMessage(message) {
 
     if (message.address === '/joint_Left_Hand_1' || message.address === '/joint_Right_Hand_1') {
         // send to api
-        var colors = colorUtil.sumColorArrays([lightLeft.result(), lightRight.result()]);
+        var colors = colorUtil.sumColorArrays()([lightLeft.result(), lightRight.result()]);
         toApi(colors);
     }
 });
