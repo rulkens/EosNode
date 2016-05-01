@@ -65,6 +65,7 @@ var colorsCombined = rxUtil
     .throttle(16)
     // fade stuff
     .scan(colorUtil.fadeColors({fastOn : true}), numLights)
+    .map(colorUtil.correctColors);
 // start empty
 //.startWith(Light.allLightsOff);
 
