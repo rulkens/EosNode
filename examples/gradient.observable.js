@@ -6,13 +6,13 @@ var _            = require('lodash'),
     settings     = require('../settings'),
     Api          = require('../lib/eos/api'),
     colorUtil    = require('../lib/eos/util/util.color.js'),
-    Gradient     = require('../lib/eos/actions.rx/gradient.observable'),
+    Gradient$     = require('../lib/eos/actions.rx/gradient.observable'),
     numLights    = require('../lib/eos/light.color').defaults.numLights,
     gradientList = require('../lib/eos/gradients');
 
 var api      = Api(settings);
 
-const TIME_PER_GRADIENT = 20; // in seconds
+const TIME_PER_GRADIENT = 5; // in seconds
 
 var gradients  = _.map(gradientList, function (g, i) {
         return {g : g, name : i}
@@ -31,7 +31,7 @@ gradientsInTime$ = Rx.Observable
         return g.g
     })
     .flatMapLatest(function (g) {
-        return Gradient({
+        return Gradient$({
             gradient : g,
             waveLength: Math.random() * 5 + 5,
             direction: Math.random() > .5 ? 'up' : 'down' })
