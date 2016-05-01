@@ -22,16 +22,14 @@ var // default
     sparkles$ = rxUtil.combineColors(sparklesSettings.map((setting) => Sparkles$(setting)))
         .map(colorUtil.correctColors)
         // fade
-        //.throttle(100)
+        .throttle(100)
         .scan(colorUtil.fadeColors({ratio : .98, fastOn : true}), numLights);
 
-Api(settings).connect(run);
+var api = Api(settings);
 
-function run (api) {
-    sparkles$.subscribe(toApi);
+sparkles$.subscribe(toApi);
 
-    function toApi (light) {
-        //console.log('light', light);
-        api.colors.set(light);
-    }
+function toApi (light) {
+    //console.log('light', light);
+    api.colors.set(light);
 }

@@ -10,7 +10,7 @@ var settings  = require('../settings'),
 /**
  * connect with the
  */
-Api(settings).connect(run);
+var api = Api(settings);
 
 function run (api) {
 
@@ -18,11 +18,11 @@ function run (api) {
         fps        : 60.0,
         length     : 30,
         waveLength : .5,
-        palette : [0x0, 0xFF, 0xFFFF], // a palette to use instead of just a color
-        //light      : {
-        //    color : 0xE5FFFF,
-        //    size  : 4
-        //},
+        //palette : [0x0, 0xFF, 0xFFFF], // a palette to use instead of just a color
+        light      : {
+           color : 0xE5FFFF,
+           size  : 4
+        },
         position   : .5,
         width      : .4,
 
@@ -43,3 +43,5 @@ function run (api) {
     // to the api
     ripple$.subscribe(api.colors.set.bind(api));
 }
+
+run(api);

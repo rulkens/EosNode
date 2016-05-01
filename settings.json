@@ -11,5 +11,12 @@
   },
 
   "actions": {
-  }
+  },
+
+  "emulator": {
+    "port": 7010,
+    "path": "./lib/eos/emulator/public/"
+  },
+
+  "client": "emulator"
 }

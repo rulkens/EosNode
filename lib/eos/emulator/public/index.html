@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>EOS Emulator Interface</title>
+    <script src="/socket.io/socket.io.js"></script>
+    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
+    <script>
+        var MESSAGE_INIT = 'INIT',
+                MESSAGE_HALOGEN = 'HALOGEN',
+                MESSAGE_LED = 'LED',
+                MESSAGE_PANIC = 'PANIC';
+
+        var socket = io();
+        socket.on('connection', function () {
+            console.log('connected!')
+        });
+
+        socket.on('message', function (message) {
+            switch (message.type) {
+                case MESSAGE_INIT:
+                    console.log('initialized');
+                    break;
+                case MESSAGE_HALOGEN:
+                    $('#halogen').text(message.value);
+                    break;
+                case MESSAGE_LED:
+                    //$('#led').text(message.value);
+                        applyLedItems(message.value);
+                    break;
+                case MESSAGE_PANIC:
+                    $('#error').text('PANIC!');
+                    break;
+            }
+        });
+        console.log('Socket.io initialized!');
+
+        // initialize the led items
+        $(document).ready(function(){
+            console.log('initializing DOM');
+            for(i = 0; i < 120; i++){
+                $('#led').append('<div class="led-item"></div>');
+            }
+        });
+
+        function applyLedItems(values){
+            var ledChildren = $('#led')[0].children;
+            console.assert(ledChildren.length === values.length);
+            //console.log('ledChildren', ledChildren);
+
+            for(i = 0; i < values.length; i++){
+                $(ledChildren[i]).css('background-color', 'rgb(' + values[i].join(',') + ')');
+            }
+        }
+    </script>
+    <style>
+        body {
+            box-sizing: border-box;
+            background-color: #000;
+            font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+            color: #333;
+        }
+
+        h1:hover {
+            color: #FFF;
+        }
+
+        #led {
+            width: 100%;
+            border: 1px solid #000;
+            height: 100px;
+        }
+
+        #led:hover {
+            border: 1px solid #ccc;
+
+        }
+        .led-item {
+            float: left;
+            width: 0.8333%;
+            height: 100%;
+            box-sizing: content-box;
+
+        }
+    </style>
+</head>
+<body>
+<h1>EOS Emulator</h1>
+<div id="halogen"></div>
+<div id="led" title="LED Lights"></div>
+<div id="error"></div>
+</body>
+</html>

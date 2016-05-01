@@ -8,10 +8,6 @@ var settings = require('../settings'),
 var api   = Api(settings),
     swipe = Swipe({ color: 0x00FF00, size: 60 });
 
-swipe.subscribe(function (val) {
-    console.log('val', val);
-});
-
 swipe.subscribe(toApi);
 
 function toApi (light) {
