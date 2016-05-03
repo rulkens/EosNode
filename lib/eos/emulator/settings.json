@@ -51,6 +51,9 @@
       },
       "sass" : {
         "main"      : "main.scss"
+      },
+      "js": {
+        "main"      : "entry.js"
       }
     },
     "dest" : {
