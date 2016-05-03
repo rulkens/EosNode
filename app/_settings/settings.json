@@ -50,8 +50,7 @@
         "main"      : "index.html"
       },
       "less" : {
-        "main"      : "main.less",
-        "icons"     : "pensioen123-icons/list.less"
+        "main"      : "main.less"
       }
     },
     "dest" : {
