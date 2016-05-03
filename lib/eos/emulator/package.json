@@ -1,0 +1,27 @@
+{
+  "name": "EosEmulator",
+  "version": "0.0.1",
+  "description": "Frontend for EOS Emulator",
+  "main": "index.js",
+  "scripts": {
+    "build": ""
+  },
+  "devDependencies": {
+    "babel-cli": "^6.8.0",
+    "babel-preset-react": "^6.5.0",
+    "browser-sync": "^2.12.5",
+    "gulp-autoprefixer": "^3.1.0",
+    "gulp-concat": "^2.6.0",
+    "gulp-if": "^2.0.0",
+    "gulp-iife": "^0.3.0",
+    "gulp-load-plugins": "^1.2.2",
+    "gulp-notify": "^2.2.0",
+    "gulp-plumber": "^1.1.0",
+    "gulp-print": "^2.0.1",
+    "gulp-sass": "^2.3.1",
+    "gulp-size": "^2.1.0",
+    "gulp-sourcemaps": "^1.6.0",
+    "gulp-uglify": "^1.5.3",
+    "gulp-util": "^3.0.7"
+  }
+}

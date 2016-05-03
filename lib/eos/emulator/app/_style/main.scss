@@ -1,0 +1,47 @@
+body {
+  box-sizing: border-box;
+  background-color: #000;
+  font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
+  color: #333;
+  padding-left: 20px;
+  padding-right: 20px;
+}
+
+h1, .connected {
+  transition: color 1s;
+}
+
+h1 {
+  &:hover {
+    color: #FFF;
+  }
+  .connected {
+    color: #FFF;
+  }
+}
+
+#led {
+  width: 100%;
+  border: 1px solid #171717;
+  height: 140px;
+  transition: border-color 1s;
+
+  &:hover {
+    border: 1px solid #ccc;
+  }
+
+  &.vis-type-fancy .led-item {
+    float: left;
+    width: 8.46%;
+    height: 100%;
+    margin-left: -3.8333%;
+    margin-right: -3.8333%;
+    mix-blend-mode: lighten;
+  }
+
+  &.vis-type-fast .led-item {
+    float: left;
+    width: 0.833%;
+    height: 100%;
+  }
+}
