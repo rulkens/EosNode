@@ -10,7 +10,7 @@ var settings  = require('../settings'),
     palettes  = require('../lib/eos/gradients');
 
 var sparklesSettings = [
-    {chance : .09, intensity: .1, palette : palettes.aquaMarine},
+    {chance : .09, intensity: 1, palette : palettes.aquaMarine},
     {chance : .01, palette : palettes.crazyOrange}
 ];
 
@@ -20,7 +20,7 @@ var // default
     //sparkles$ = Sparkles$({color : 0xFF0000}) // red
     // with palette
     sparkles$ = rxUtil.combineColors(sparklesSettings.map((setting) => Sparkles$(setting)))
-        .map(colorUtil.correctColors)
+        //.map(colorUtil.correctColors)
         // fade
         .throttle(100)
         .scan(colorUtil.fadeColors({ratio : .98, fastOn : true}), numLights);

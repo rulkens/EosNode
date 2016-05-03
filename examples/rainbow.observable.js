@@ -6,7 +6,14 @@ var settings = require('../settings'),
     Rainbow    = require('../lib/eos/actions.rx/rainbow.observable');
 
 var api   = Api(settings),
-    rainbow = Rainbow({});
+    rainbow = Rainbow({
+        fps        : 60,
+        waveLength : 2,
+        direction  : 'down', //from bottom to top, can be 'up' or 'down'
+        scaling    : 1,
+        intensity  : .6,
+        saturation : .5
+    });
 
 rainbow.subscribe(function (val) {
     //console.log('val', val);

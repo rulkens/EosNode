@@ -17,21 +17,21 @@ function run (api) {
     var rippleSettings = {
         fps        : 60.0,
         length     : 30,
-        waveLength : .5,
+        waveLength : 10.5,
         //palette : [0x0, 0xFF, 0xFFFF], // a palette to use instead of just a color
         light      : {
-           color : 0xE5FFFF,
-           size  : 4
+           color : 0xFFFFFF,
+           size  : 9
         },
         position   : .5,
-        width      : .4,
+        width      : .6,
 
     };
 
     /*
     this is the actual observable. We can give it some initial settings.
      */
-    var ripple$ = Ripple$(rippleSettings).map(colorUtil.correctColors);
+    var ripple$ = Ripple$(rippleSettings)//.map(colorUtil.correctColors)
     // with a specific color
     //ripple = Ripple({color: 0xFF0000}) // red
     // with palette

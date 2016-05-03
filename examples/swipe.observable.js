@@ -3,12 +3,12 @@
  */
 var settings = require('../settings'),
     Api      = require('../lib/eos/api'),
-    Swipe    = require('../lib/eos/actions.rx/swipe.observable');
+    Swipe$    = require('../lib/eos/actions.rx/swipe.observable');
 
 var api   = Api(settings),
-    swipe = Swipe({ color: 0x00FF00, size: 60 });
+    swipe$ = Swipe$({ color: 0x00FF00, size: 60 });
 
-swipe.subscribe(toApi);
+swipe$.subscribe(toApi);
 
 function toApi (light) {
     //console.log('light', light);

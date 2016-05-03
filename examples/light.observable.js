@@ -4,7 +4,7 @@
 var settings  = require('../settings'),
     Api       = require('../lib/eos/api'),
     colorUtil = require('../lib/eos/util/util.color.js'),
-    Light     = require('../lib/eos/actions.rx/light.color.observable'),
+    Light$     = require('../lib/eos/actions.rx/light.color.observable'),
     numLights = require('../lib/eos/light.color').defaults.numLights;
 
 var lightSettings = {
@@ -13,8 +13,12 @@ var lightSettings = {
         offset: .5
     },
     light : {
-        intensity: .1,
-        color : 0xFFFF00
+        position: {
+            base: .1,
+            variation: 10
+        },
+        intensity: 1,
+        color : 0xFFFFFF
     }
 };
 
@@ -22,7 +26,7 @@ var api = Api(settings),
     // default
     //light = Light()
     // with a specific color
-    light$ = Light(lightSettings).map(toResult) // red
+    light$ = Light$(lightSettings).map(toResult) // red
 // fade
 //    .scan(colorUtil.fadeColors({fastOn : true}), numLights);
 
