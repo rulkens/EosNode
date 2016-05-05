@@ -11,7 +11,6 @@
     <title>EOS Emulator Interface</title>
 
     <script src="/socket.io/socket.io.js"></script>
-    <script src="http://code.jquery.com/jquery-1.11.1.js"></script>
 
     <!-- for HTML5 routing -->
     <base href="/"/>
@@ -20,14 +19,9 @@
     <link rel="stylesheet" href="/style/main.css">
 </head>
 <body>
-<h1>EOS Emulator | <span id="connected">connected</span></h1>
-<div id="halogen"></div>
-<div id="led" title="LED Lights" class="leds"></div>
-<div id="error"></div>
-
-<!-- main react element -->
+<!-- main React element -->
 <div id="root"></div>
-
+<div id="error"></div>
 <!-- scripts -->
 <script src="/script/vendor.js"></script>
 <script src="/script/app.js"></script>

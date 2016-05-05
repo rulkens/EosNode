@@ -79,5 +79,6 @@
     "default"       : "dev"
   },
   "globalDefs"      : "",
-  "isDevelopment": true
+  "isDevelopment": true,
+  "dependencies": ["redux", "react", "react-dom", "classnames/bind"]
 }
