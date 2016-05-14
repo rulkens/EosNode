@@ -8,11 +8,11 @@ var settings = require('../settings'),
 var api   = Api(settings),
     rainbow = Rainbow({
         fps        : 60,
-        waveLength : 2,
+        waveLength : 10,
         direction  : 'down', //from bottom to top, can be 'up' or 'down'
         scaling    : 1,
         intensity  : .6,
-        saturation : .5
+        saturation : .6
     });
 
 rainbow.subscribe(function (val) {

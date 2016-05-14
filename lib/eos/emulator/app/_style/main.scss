@@ -1,10 +1,30 @@
-body {
+* {
   box-sizing: border-box;
+}
+
+html, body {
+  margin: 0;
+  padding: 0;
+}
+body {
+
   background-color: #000;
   font-family: "Helvetica Neue Light", "HelveticaNeue-Light", "Helvetica Neue", Calibri, Helvetica, Arial;
   color: #333;
   padding-left: 20px;
   padding-right: 20px;
+  height: 100vh;
+}
+
+/* flex it up */
+body, #root, #root > div {
+  display: flex;
+  flex: 1;
+}
+
+// react div
+#root > div {
+  flex-direction: column;
 }
 
 h1, .connected {
@@ -21,36 +41,96 @@ h1 {
 }
 
 .leds {
-  width: 100%;
+
+  overflow: hidden;
+  margin: auto;
+
+  &.direction-horizontal {
+    width: 100%;
+    height: 140px;
+
+    display: flex;
+
+    .led-item {
+      //float: left;
+      flex: 1;
+    }
+
+    &.vis-type-fancy {
+      .led-item {
+        width: 8.46%;
+        height: 100%;
+        margin-left: -3.8333%;
+        margin-right: -3.8333%;
+      }
+    }
+
+    &.vis-type-fast {
+      .led-item {
+        //width: 0.833%;
+        height: 100%;
+      }
+    }
+  }
+
+  &.direction-vertical {
+    width: 140px;
+    height: 100%;
+
+    flex: 1;
+    display: flex;
+    flex-direction: column-reverse;
+
+    .led-item {
+      display: block;
+      width: 100%;
+      height: 20px;
+    }
+
+    &.vis-type-fancy {
+      .led-item {
+        height: 8.46%;
+        min-height: 10px;
+        width: 100%;
+        margin-top: -3.8333%;
+        margin-bottom: -3.8333%;
+      }
+    }
+
+    &.vis-type-fast {
+      .led-item {
+        flex: 1;
+        //min-height: 10px;
+        //height: 0.833%;
+        width: 100%;
+      }
+    }
+  }
+
+
   border: 1px solid #171717;
-  height: 140px;
   transition: border-color 1s;
 
   &:hover {
     border: 1px solid #ccc;
   }
 
-  &.vis-type-fancy .led-item {
-    float: left;
-    width: 8.46%;
-    height: 100%;
-    margin-left: -3.8333%;
-    margin-right: -3.8333%;
-    mix-blend-mode: lighten;
+
+
+  &.vis-type-fancy {
+    .led-item {
+      mix-blend-mode: lighten;
+    }
   }
 
-  &.vis-type-fast .led-item {
-    float: left;
-    width: 0.833%;
-    height: 100%;
-  }
+
 }
 
 a {
   color: #eee;
 }
 
-.vis-types {
+.toggle-links {
   a {
     color: #333;
   }

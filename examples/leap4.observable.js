@@ -12,7 +12,7 @@ var _         = require('lodash'),
     leap      = require('../lib/eos/actions.rx/leap-motion.observable'),
     Light     = require('../lib/eos/actions.rx/light.color.observable'),
     Sparkles  = require('../lib/eos/actions.rx/sparkles.color.observable'),
-    Ripple    = require('../lib/eos/actions.rx/ripple.color.observable'),
+    Ripple$    = require('../lib/eos/actions.rx/ripple.color.observable'),
     numLights = require('../lib/eos/light.color').defaults.numLights,
     gradients = require('../lib/eos/gradients');
 
@@ -56,13 +56,16 @@ var settings = {
 
 var handsCombined = rxUtil
     .combineColors([
+        sparklesWhenNoHands$(),
+        rippleOnHandOn$('left'),
+        rippleOnHandOn$('right'),
         handLight$('left', settings.lights.left),
         handLight$('right', settings.lights.right)
     ], 'add')
-    .throttle(16)
+    .throttle(1000/60) // to 60fps
     // fade stuff
     .scan(colorUtil.fadeColors({fastOn : true}), numLights)
-    .map(colorUtil.correctColors);
+    //.map(colorUtil.correctColors);
 // start empty
 //.startWith(Light.allLightsOff);
 
@@ -178,8 +181,8 @@ function rippleOnHandOn$ (handType, rippleOptions) {
 
     function handOnToRipple$ (rippleOptions) {
         return function (hand) {
-            console.log('hand', hand.palmPosition);
-            return Ripple(
+            console.log('hand.palmPosition', hand.palmPosition);
+            return Ripple$(
                 _.extend(rippleOptions,
                     {
                         position : normPalmPos(hand.palmPosition).y,
